@@ -78,6 +78,7 @@ jobs:
         env:
           SupabaseProjectUrl: ${{ vars.SUPABASEAPIKEY }}
           SupabaseAPIKey: ${{ vars.SUPABASEPROJECTURL }}
+          supabaseUrl: "dummy"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
