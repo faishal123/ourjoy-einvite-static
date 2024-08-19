@@ -24,10 +24,19 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  SupabaseProjectUrl: ${{ vars.SUPABASEAPIKEY }}
+  SupabaseAPIKey: ${{ vars.SUPABASEPROJECTURL }}
+  supabaseUrl: "dummy"
+
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest 
+    env:
+      SupabaseProjectUrl: ${{ vars.SUPABASEAPIKEY }}
+      SupabaseAPIKey: ${{ vars.SUPABASEPROJECTURL }}
+      supabaseUrl: "dummy"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,13 +81,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
           SupabaseProjectUrl: ${{ vars.SUPABASEAPIKEY }}
           SupabaseAPIKey: ${{ vars.SUPABASEPROJECTURL }}
           supabaseUrl: "dummy"
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Build with Next.js
+        env:
+          SupabaseProjectUrl: ${{ vars.SUPABASEAPIKEY }}
+          SupabaseAPIKey: ${{ vars.SUPABASEPROJECTURL }}
+          supabaseUrl: "dummy"
+        run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
